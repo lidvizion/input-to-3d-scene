@@ -1,0 +1,9 @@
+{
+  "name": "Video to 3D Scene",
+  "slug": "video-to-3d-scene",
+  "task": "3d_recon",
+  "inputs": ["video"],
+  "outputs": ["scene_glb", "camera_paths"],
+  "description": "Reconstruct a scene or object from video in simulation. Show keyframe picks and a 3D splat or GLB placeholder.",
+  "version": "1.0.0"
+}
