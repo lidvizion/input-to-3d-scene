@@ -112,7 +112,7 @@ export default function ProcessingFlow({ isProcessing, onComplete }: ProcessingF
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-200 dark:border-slate-700">
             <div 
-              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-500 ease-out shadow-sm"
+              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 dark:from-indigo-400 dark:to-emerald-400 rounded-full transition-all duration-500 ease-out shadow-sm"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -185,9 +185,9 @@ export default function ProcessingFlow({ isProcessing, onComplete }: ProcessingF
                 {isActive && (
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                      <div className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                     </div>
                     <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">Processing...</span>
                   </div>
@@ -200,7 +200,7 @@ export default function ProcessingFlow({ isProcessing, onComplete }: ProcessingF
         {/* Footer */}
         <div className="mt-8 text-center">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-amber-500 dark:bg-amber-400 rounded-full animate-pulse"></div>
             <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
               This process typically takes 30-60 seconds depending on video complexity
             </p>

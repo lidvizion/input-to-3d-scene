@@ -87,7 +87,7 @@ export default function ProcessingComplete({ onContinue }: ProcessingCompletePro
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className={`absolute w-2 h-2 bg-indigo-400 rounded-full opacity-40 animate-pulse ${
+              className={`absolute w-2 h-2 bg-indigo-400 dark:bg-indigo-500 rounded-full opacity-40 animate-pulse ${
                 showAnimation ? 'animate-bounce' : ''
               }`}
               style={{
