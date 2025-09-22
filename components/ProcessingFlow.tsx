@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { CheckCircle, Loader2, Video, Camera, Zap, Download } from 'lucide-react'
+import { logger } from '@/utils/logger'
 
 interface ProcessingStep {
   id: string
@@ -77,6 +78,7 @@ export default function ProcessingFlow({ isProcessing, onComplete }: ProcessingF
 
       if (overallProgress >= 100) {
         clearInterval(interval)
+        logger.processingStep('completed', 'all', { progress: 100 })
         setTimeout(() => {
           onComplete?.()
         }, 500)

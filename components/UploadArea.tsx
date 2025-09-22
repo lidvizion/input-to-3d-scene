@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
-import { Upload, FileVideo } from 'lucide-react'
+import { Upload, FileVideo, AlertCircle } from 'lucide-react'
+import { validateVideoFile } from '@/utils/validation'
+import { logger } from '@/utils/logger'
 
 interface UploadAreaProps {
   onFileSelect: (file: File) => void
@@ -11,12 +13,39 @@ interface UploadAreaProps {
 export default function UploadArea({ onFileSelect, isProcessing = false }: UploadAreaProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (file && file.type.startsWith('video/')) {
-      onFileSelect(file)
+    if (file) {
+      processFile(file)
     }
+  }
+
+  const processFile = (file: File) => {
+    setError(null)
+    
+    // Validate file
+    const validation = validateVideoFile(file)
+    if (!validation.isValid) {
+      setError(validation.error || 'Invalid file')
+      logger.warn('File validation failed', { 
+        fileName: file.name, 
+        fileSize: file.size, 
+        fileType: file.type,
+        error: validation.error 
+      })
+      return
+    }
+
+    // Log successful file selection
+    logger.userAction('video_file_selected', {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type
+    })
+
+    onFileSelect(file)
   }
 
   const handleDragOver = (event: React.DragEvent) => {
@@ -34,8 +63,8 @@ export default function UploadArea({ onFileSelect, isProcessing = false }: Uploa
     setIsDragOver(false)
     
     const file = event.dataTransfer.files[0]
-    if (file && file.type.startsWith('video/')) {
-      onFileSelect(file)
+    if (file) {
+      processFile(file)
     }
   }
 
@@ -66,6 +95,14 @@ export default function UploadArea({ onFileSelect, isProcessing = false }: Uploa
           </div>
         </div>
       </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="flex items-center space-x-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+          <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+        </div>
+      )}
 
       {/* Action Button */}
       <div className="flex justify-center">

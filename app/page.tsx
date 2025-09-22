@@ -9,8 +9,10 @@ import UploadArea from '@/components/UploadArea'
 import LoadingState from '@/components/LoadingState'
 import ProcessingFlow from '@/components/ProcessingFlow'
 import ProcessingComplete from '@/components/ProcessingComplete'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import { ThemeProvider, useTheme } from '@/components/ThemeProvider'
 import { ReconstructionResponse, ExportData } from '@/types'
+import { logger } from '@/utils/logger'
 
 function MainContent() {
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -39,6 +41,12 @@ function MainContent() {
   }, [])
 
   const handleFileUpload = (file: File) => {
+    logger.userAction('video_upload_started', {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type
+    })
+
     setVideoFile(file)
     setVideoUrl(URL.createObjectURL(file))
     setIsProcessing(true)
@@ -50,6 +58,9 @@ function MainContent() {
     setTimeout(() => {
       setIsProcessing(false)
       setShowCompletion(true)
+      logger.userAction('video_processing_completed', {
+        fileName: file.name
+      })
     }, 12000) // 12 seconds for the full processing flow
   }
 
@@ -69,11 +80,13 @@ function MainContent() {
 
   const loadMockData = async () => {
     try {
+      logger.info('Loading mock reconstruction data')
       const response = await fetch('/mock/response.json')
       const data = await response.json()
       setReconstructionData(data)
+      logger.info('Mock reconstruction data loaded successfully')
     } catch (error) {
-      console.error('Failed to load mock data:', error)
+      logger.error('Failed to load mock data', error as Error)
     }
   }
 
@@ -311,8 +324,10 @@ function MainContent() {
 
 export default function Home() {
   return (
-    <ThemeProvider>
-      <MainContent />
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <MainContent />
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
